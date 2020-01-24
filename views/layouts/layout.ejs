@@ -7,12 +7,10 @@
    <title>My library</title>
 </head>
 <body>
-   Dit is de Layout File hoofd gedeelte Before
-   <br />
+   <%- include('../partials/header.ejs')%>
    <!-- e - na de % is specifiek voor4 de layouts -->
    <!-- zou ooki met incluyde hebben gekund -->
+   <%- include('../partials/errorMessage.ejs')%>
    <%- body %>
-   <br />
-   Dit iis ook de Layoutfile After
 </body>
 </html>
