@@ -9,7 +9,7 @@ router.get('/', async (req, res ) => {
    // met een querystring en geen POST in the body
    if (req.query.name != null && req.query.name !== '') {
       searchOptions.name = new RegExp(req.query.name, 'i')
-      console.log(searchOptions.name)
+      //console.log(searchOptions.name)
    }
    try {
       const authors  = await Author.find(searchOptions)
