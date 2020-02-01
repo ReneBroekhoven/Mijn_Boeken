@@ -24,6 +24,14 @@ de urlencoded is om de fom data te lezen (waar bij de input name="de naam") de n
 
 multer package om multipart form te kunne verwerken en ook in de form tag aangegeven als enctyp="multipart/formdata"
 multer maakt ook zelf de betreffende folder aan
+? wordt niet meer gebruikt in de finale versie
+
+Filepond om fileuploads makkelijk te maken
+Dit gaat via een cdn 
+Aanvullend de cdn voor fileencode als extra cdn (alleen de 1e)
+Aanvullend imagepreview en image resize
+
+
 
 
 
