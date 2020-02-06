@@ -6,6 +6,7 @@ const express = require('express')
 const app = express()
 const expressLayouts =  require('express-ejs-layouts')
 var bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 
 // met een relative path
 const indexRouter = require('./routes/index')
@@ -19,6 +20,7 @@ app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout.ejs' )
 //dit gebruikt de <body> element (zie layout.ejs) van hetgeen je in de route opgeeft
 app.use(expressLayouts)
+app.use(methodOverride('_method'))
 
 // zit er tegenwoordige standaard in !!
 app.use(express.json())
