@@ -44,24 +44,12 @@ router.get('/new', (req, res ) => {
            errorMessage : 'Error bij aanmeken author'
         })
     }
-    //manier zonder async/await
-   //  author.save((err, newAuthor) =>{
-   //     if (err) {
-   //        // op deze manier zodat ede oorspronkelijk ingegeven waarde opnieuw verschijnt
-   //        res.render ('authors/new', {
-   //           author: author,
-   //           errorMessage : 'Error bij aanmeken author'
-   //        })
-   //     } else {
-   //        //res.redirect(`authors/${newAuthor.id}`)
-   //        res.redirect('authors')
-   //     }
-   //  })
+
 })
 
 
 // een browser kan alleen een get of post request doen dus : 
-// heb je een method nodui in een package : method-override 
+// heb je een method nodig in een package : method-override 
 // deze vult de post aan met een extra header dat het eigenlijk een put of delete is
 // gebruik NOOIT een get link voor een delete, omdat google searchengine naar alle get's in je code kjkt en dar presneteert als een zoekresultaat: zo kan alles maar gedelete worden
 

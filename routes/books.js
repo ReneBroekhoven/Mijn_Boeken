@@ -29,14 +29,14 @@ router.get('/', async (req, res ) => {
   }
 })
 
-// New book;  maar deze maakt de nieuwe book niet 
+// New book route;  maar deze maakt de nieuwe book niet 
 router.get('/new', async (req, res ) => {
    //console.log("/new get route")
    //res.send('new books van Rene')
    renderNewPage(res, new Book())
 })
 
-// Creating New book
+// Creating New book route
  router.post('/', async (req, res ) => {
    const fileName = req.file != null ? req.file.filename : null 
     const book = new Book({
@@ -49,28 +49,81 @@ router.get('/new', async (req, res ) => {
    saveCover(book, req.body.cover)
    try{
       const newBook = await book.save()
-      // res.redirect(`books/${newBook.id}`)
-      res.redirect('books')
+      res.redirect(`books/${newBook.id}`)
+      //res.redirect('books')
    }catch{  
       renderNewPage(res, book, true) 
-   }
-  
+   }  
 })
 
-async function renderNewPage(res, book, hasError = false){
-   try {
-      const authors = await Author.find({})
-      //console.log("probeert authotrs te vinden")
-      const params = {     
-         authors: authors,
-         book: book
+
+// show book route
+router.get('/:id', async (req, res) =>{
+   try{
+      // populate haalt alle gegevens op van de author (ipv alleen het id)
+      const book = await Book.findById(req.params.id)
+                              .populate('author')
+                              .exec()
+      res.render('books/show', {book: book})
+   }catch{  
+      res.redirect('/') 
+   }
+})
+
+// Edit book route
+router.get('/:id/edit', async (req, res ) => {
+   try{
+      const book = await Book.findById(req.params.id)
+      renderEditPage(res, book)
+   }catch{
+      res.redirect('/')
+   }
+})
+
+// Update Book route
+router.put('/:id', async (req, res ) => {
+   let book
+   try{
+      book = await Book.findById(req.params.id)
+      book.title = req.body.title
+      book.author = req.body.author
+      book.publishDate = new Date(req.body.publishDate)
+      book.pageCount = req.body.pageCount
+      book.description = req.body.description
+      if (req.body.cover != null && req.body.cover !== '' ) {
+         saveCover(book,req.body.cover)   
       }
-      if (hasError) params.errorMessage = 'Error creating you book'
-      res.render('books/new', params)
-     } catch{
-      res.redirect('/books')
-     }
-}
+      await book.save()
+      res.redirect(`books/${book.id}`)
+   }catch(error){  
+      console.log(error)
+      if (book != null) {
+         renderEditPage(res, book, true) 
+      }else{
+         res.redirect('/')
+      }
+      
+   }
+})
+
+// delete book page
+router.delete('/:id', async (req, res) =>{
+   let book
+   try{
+      book = await Book.findById(req.params.id)
+      await book.remove()
+      res.redirect(`books/`)
+   }catch(error){  
+      if (book != null) {
+         res.render('books.show', {
+            book: book,
+            errorMessage: "could nog remove book"
+         }) 
+      }else{
+         res.redirect('/')
+      }
+   }
+})
 
 function saveCover(book, coverEncoded) {
    if (coverEncoded == null) return
@@ -80,5 +133,35 @@ function saveCover(book, coverEncoded) {
      book.coverImageType = cover.type
    }
  }
+async function renderNewPage(res, book, hasError = false){
+   renderFormPage(res, book, 'new', hasError)
+}
+
+async function renderEditPage(res, book, hasError = false){
+   renderFormPage(res, book, 'edit', hasError)
+}
+
+// deze komt ipv de bovenste twee hier 
+async function renderFormPage(res, book, form, hasError = false){
+   try {
+      const authors = await Author.find({})
+      const params = {     
+         authors: authors,
+         book: book
+      }
+      if (hasError) {
+         if (form == 'edit') {
+            params.errorMessage = 'Error updating your book'
+         } else {
+            params.errorMessage = 'Error creating your book'
+         }
+      }
+      res.render(`books/${form}`, params)
+     } catch{
+      res.redirect('/books')
+     }
+}
+
+
 
 module.exports = router

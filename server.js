@@ -24,8 +24,8 @@ app.use(methodOverride('_method'))
 
 // zit er tegenwoordige standaard in !!
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
-//app.use(bodyParser.urlencoded({limit: '10mb', extended: false}))
+//app.use(express.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({limit: '500mb', extended: false}))
 
 const mongoose = require('mongoose')
 mongoose.connect(process.env.DATABASE_URL, {
