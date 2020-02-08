@@ -74,6 +74,7 @@ router.get('/:id', async (req, res) =>{
 router.get('/:id/edit', async (req, res ) => {
    try{
       const book = await Book.findById(req.params.id)
+      //console.log(book)
       renderEditPage(res, book)
    }catch{
       res.redirect('/')
@@ -94,7 +95,9 @@ router.put('/:id', async (req, res ) => {
          saveCover(book,req.body.cover)   
       }
       await book.save()
-      res.redirect(`books/${book.id}`)
+      //console.log('test')
+      //res.redirect(`books/${book.id}`)
+      res.redirect(`${book.id}`)
    }catch(error){  
       console.log(error)
       if (book != null) {
